@@ -45,7 +45,7 @@ async fn main() -> std::io::Result<()> {
     let manager = ConnectionManager::<PgConnection>::new(database_url);
     let pool: Pool =r2d2::Pool::builder()
         .build(manager)
-        .expect("Failed ot create pool.");
+        .expect("Failed on create pool.");
 
     HttpServer::new(move || {
         let auth = HttpAuthentication::bearer(validator);
