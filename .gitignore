@@ -2,3 +2,4 @@
 .env
 env.sh
 logfile
+.DS_Store

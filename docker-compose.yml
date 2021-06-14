@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+    db:
+        environment:
+            POSTGRES_USER: "${POSTGRES_USER}"
+            POSTGRES_DB: "${POSTGRES_DB}"
+            POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+        image: postgres:13.3-alpine
+        volumes:
+            - ${HOME}/postgres-data/:/var/lib/postgresql/data
+        ports:
+            - 5432:5432
+
+    app:
+        depends_on:
+            - db
+        build: .
+        environment:
+            DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}"
+            AUTHORITY: "${AUTHORITY}"
+        ports:
+            - 8080:8080
+
+volumes:
+    postgres-data:
