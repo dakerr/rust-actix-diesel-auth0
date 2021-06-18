@@ -6,7 +6,7 @@ jobs:
         docker:
             - image: cimg/rust:1.52.1
             - image: circleci/postgres:alpine
-        working_directory: /volume
+        working_directory: ~/workspace
         steps:
             - checkout
             - run: echo 'export CACHE_VERSION="1"' >> $BASH_ENV
