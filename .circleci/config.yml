@@ -18,6 +18,8 @@ jobs:
             - run: cargo build --release
             - save_cache:
                 key: target-bundle-{{ checksum "Cargo.toml" }}
+                paths:
+                    - .
 
 workflows:
     version: 2
