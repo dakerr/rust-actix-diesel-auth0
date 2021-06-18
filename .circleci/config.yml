@@ -3,7 +3,6 @@ version: 2
 jobs:
     checkout_and_bundle_dependencies:
         docker:
-            - image: circleci/postgres:alpine
             - image: clux/muslrust
         auth:
             username: $DOCKERHUB_USER
