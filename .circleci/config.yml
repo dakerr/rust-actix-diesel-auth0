@@ -60,3 +60,4 @@ workflows:
                   context:
                       - docker-hub-creds
                       - postgres-creds
+                      - env-vars
