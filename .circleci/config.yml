@@ -1,29 +1,61 @@
 version: 2
 
 jobs:
-    checkout_and_bundle_dependencies:
-        docker:
-            - image: clux/muslrust
+  checkout_and_bundle_dependencies:
+    docker:
+      - image: clux/muslrust
         auth:
-            username: $DOCKERHUB_USER
-            password: $DOCKERHUB_PASSWORD
+          username: $DOCKERHUB_USER
+          password: $DOCKERHUB_PASSWORD
+    working_directory: /volume
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - target-bundle-{{ checksum "Cargo.toml" }}
+            - target-bundle-
+      - run: cargo build --release
+      - save_cache:
+        key: target-bundle-{{ checksum "Cargo.toml" }}
+        paths:
+          - target
+
+  test_with_postgres:
+    docker:
+      - image: clux/muslrust
+        auth:
+          username: $DOCKERHUB_USER
+          password: $DOCKERHUB_PASSWORD
         working_directory: /volume
-        steps:
-            - checkout
-            - restore_cache:
-                keys:
-                    - target-bundle-{{ checksum "Cargo.toml" }}
-                    - target-bundle-
-            - run: cargo build --release
-            - save_cache:
-                key: target-bundle-{{ checksum "Cargo.toml" }}
-                paths:
-                    - target
+        environment:
+          DATABASE_URL=$DATABASE_URL
+      - image: circleci/postgres:alpine
+        environment:
+          POSTGRES_USER=$POSTGRES_USER
+          POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+          POSTGRES_DB=$POSTGRES_DB
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - target-bundle-{{ checksum "Cargo.toml" }}
+            - target-bundle-
+      - run: cargo test
+      - save_cache:
+        key: target-bundle-{{ checksum "Cargo.toml" }}
+        paths:
+          - target
 
 workflows:
-    version: 2
-    build-and-deploy-soon:
-        jobs:
-            - checkout_and_bundle_dependencies:
-                context:
-                    - docker-hub-creds
+  version: 2
+  build-and-deploy-soon:
+    jobs:
+      - checkout_and_bundle_dependencies:
+          context:
+            - docker-hub-creds
+      - test_with_postgres:
+          context:
+            - docker-hub-creds
+            - postgres-creds
