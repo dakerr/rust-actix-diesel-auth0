@@ -55,19 +55,19 @@ pub fn delete_single_user(pool: &PoolType, user_id: i32) -> Result<usize, diesel
     Ok(count)
 }
 
-#[cfg(test)]
-pub mod tests {
-    use super::*;
-    use crate::tests::helpers::tests::get_pool;
+// #[cfg(test)]
+// pub mod tests {
+//     use super::*;
+//     use crate::tests::helpers::tests::get_pool;
 
-    pub fn get_all() -> Result<Vec<User>, diesel::result::Error> {
-        let pool = get_pool();
-        get_all_users(&pool)
-    }
+//     pub fn get_all() -> Result<Vec<User>, diesel::result::Error> {
+//         let pool = get_pool();
+//         get_all_users(&pool)
+//     }
 
-    #[test]
-    fn it_gets_all_users() {
-        let all = get_all();
-        assert!(all.is_ok());
-    }
-}
+//     #[test]
+//     fn it_gets_all_users() {
+//         let all = get_all();
+//         assert!(all.is_ok());
+//     }
+// }
