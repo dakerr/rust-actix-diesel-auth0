@@ -31,7 +31,7 @@ jobs:
               environment:
                   DATABASE_URL: $DATABASE_URL
 
-            - image: circleci/postgres:alpine
+            - image: circleci/postgres:9.6.5-alpine-ram
               environment:
                   POSTGRES_USER: $POSTGRES_USER
                   POSTGRES_PASSWORD: $POSTGRES_PASSWORD
