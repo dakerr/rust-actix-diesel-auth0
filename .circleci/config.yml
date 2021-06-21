@@ -43,8 +43,8 @@ jobs:
                   keys:
                       - target-bundle-{{ checksum "Cargo.toml" }}
                       - target-bundle-
-            - run: sudo apt-get update
-            - run: sudo apt-get install postgresql-client-9.6
+            - run: apt-get update
+            - run: apt-get install postgresql-client-9.6
             - run: whoami
             - run: psql -h localhost -U postgres -l
             - run: cargo test
