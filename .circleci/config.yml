@@ -43,6 +43,8 @@ jobs:
                   keys:
                       - target-bundle-{{ checksum "Cargo.toml" }}
                       - target-bundle-
+            - run: whoami
+            - run: psql -h localhost -U postgres -l
             - run: cargo test
             - save_cache:
                   key: target-bundle-{{ checksum "Cargo.toml" }}
