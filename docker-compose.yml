@@ -17,8 +17,12 @@ services:
             - db
         build: .
         environment:
+            DATABASE: "postgres"
             DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}"
             AUTHORITY: "${AUTHORITY}"
+            RUST_BACKTRACE: 1
+            RUST_LOG: "acitx_web=info,actix_server=info"
+            SERVER: "0.0.0.0:8080"
         ports:
             - 8080:8080
 
