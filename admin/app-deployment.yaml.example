@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <YOUR-DEPLOYMENT-NAME>
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: <YOUR-APPLICATION-NAME>
+      tier: backend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: <YOUR-APPLICATION-NAME>
+        tier: backend
+    spec:
+      containers:
+        - image: <GCR.IO/YOUR-PROJECT-ID/YOUR-IMAGE-NAME>
+          name: <YOUR-IMAGE-NAME>
+          ports:
+            - containerPort: 8080
+              name: <YOUR-IMAGE-NAME>
+          env:
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: <YOUR-DB-SECRET>
+                key: database
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: <YOUR-DB-SECRET>
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: <YOUR-DB-SECRET>
+                key: password
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: <YOUR-DB-SECRET>
+                key: db_host
+          - name: AUTHORITY
+            value: <AUTH0-AUTHORITY-URL>
+          - name: RUST_BACKTRACE
+            value: "1"
+          - name: RUST_lOG
+            value: "actix_web=info,actix_server=info"
+          - name: SERVER
+            value: "0.0.0.0:8080"
