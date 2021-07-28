@@ -39,7 +39,13 @@ pub fn init_pool<T>(config: Config) -> Result<Pool<T>, PoolError>
 where
     T: Connection + 'static,
 {
-    let manager = ConnectionManager::<T>::new(config.database_url);
+    let database_url = format!("{}://{}:{}@{}/{}",
+        config.db_type,
+        config.db_user,
+        config.db_password,
+        config.db_host,
+        config.db_name);
+    let manager = ConnectionManager::<T>::new(database_url);
     Pool::builder().build(manager)
 }
 

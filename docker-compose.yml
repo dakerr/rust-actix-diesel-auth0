@@ -2,10 +2,11 @@ version: "3.8"
 
 services:
     db:
+        # .env from project base is automatically read (+v1.28)
         environment:
-            POSTGRES_USER: "${POSTGRES_USER}"
-            POSTGRES_DB: "${POSTGRES_DB}"
-            POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+            POSTGRES_USER: "${DB_USER}"
+            POSTGRES_DB: "${DB_NAME}"
+            POSTGRES_PASSWORD: "${DB_PASSWORD}"
         image: postgres:13.3-alpine
         volumes:
             - ${HOME}/postgres-data/:/var/lib/postgresql/data
@@ -16,13 +17,9 @@ services:
         depends_on:
             - db
         build: .
-        environment:
-            DATABASE: "postgres"
-            DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}"
-            AUTHORITY: "${AUTHORITY}"
-            RUST_BACKTRACE: 1
-            RUST_LOG: "acitx_web=info,actix_server=info"
-            SERVER: "0.0.0.0:8080"
+        # .env can also be specified directly (ie. .env.local)
+        env_file:
+            - .env
         ports:
             - 8080:8080
 

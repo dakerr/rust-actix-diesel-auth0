@@ -12,10 +12,17 @@ use crate::database::DatabaseConnection;
 use dotenv::dotenv;
 use serde::Deserialize;
 
+
+// break apart the database_url -
+// component pieces make it easier to work with GCP SQL
 #[derive(Clone, Deserialize, Debug)]
 pub struct Config {
     pub database: DatabaseConnection,
-    pub database_url: String,
+    pub db_type: String,
+    pub db_name: String,
+    pub db_user: String,
+    pub db_password: String,
+    pub db_host: String,
     pub rust_backtrace: u8,
     pub rust_log: String,
     pub server: String,
